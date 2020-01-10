@@ -2,16 +2,16 @@
 FROM alpine:3.9
 MAINTAINER Avi Deitcher <https://github.com/deitch>
 
-@ENV TERM=xterm \
-TZ=Asia/Bangkok
 # install the necessary client
 # the mysql-client must be 10.3.15 or later
 RUN apk add --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 samba-client shadow tzdata && \
     rm -rf /var/cache/apk/* && \
     touch /etc/samba/smb.conf && \
-    cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ >/etc/timezone && \
-    apk del tzdata@
-
+    # Setup timezone
+     && cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime \
+     && echo "Asia/Bangkok" >  /etc/timezone \
+     && echo "Asia/Bangkok" >  /etc/TZ \
+     && unset TZ \
     pip3 install awscli
 
 # set us up to run as non-root user
