@@ -1,17 +1,13 @@
 # mysql backup image
 FROM alpine:3.9
 MAINTAINER Avi Deitcher <https://github.com/deitch>
-
+#Set TimeZone to Asia/Bangkok
+ENV TZ=Asia/Bangkok
 # install the necessary client
 # the mysql-client must be 10.3.15 or later
-RUN apk add --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 samba-client shadow tzdata && \
+RUN apk add --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 samba-client shadow  && \
     rm -rf /var/cache/apk/* && \
     touch /etc/samba/smb.conf && \
-    # Setup timezone
-     && cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime \
-     && echo "Asia/Bangkok" >  /etc/timezone \
-     && echo "Asia/Bangkok" >  /etc/TZ \
-     && unset TZ \
     pip3 install awscli
 
 # set us up to run as non-root user
